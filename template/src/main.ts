@@ -1,7 +1,7 @@
-import './declarations'
+import './declarations';
 
-import * as Vue from 'vue'
-import App from './App.vue'
+import * as Vue from 'vue';
+import App from './App.vue';
 
 new Vue({
   el: '#app',

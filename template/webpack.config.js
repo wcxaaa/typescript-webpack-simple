@@ -1,5 +1,6 @@
-var path = require('path')
-var webpack = require('webpack')
+const path = require('path');
+
+const webpack = require('webpack');
 
 module.exports = {
   entry: './src/main.ts',
@@ -12,35 +13,45 @@ module.exports = {
     loaders: [
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
+        use: [
+          {
+            loader: 'vue-loader',
+            options: {
+              esModule: true
+            }
+          }
+        ]
       },
       {
         test: /\.ts$/,
-        loader: 'ts-loader',
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              appendTsSuffixTo: [/\.vue$/]
+            }
+          }
+        ],
         exclude: /node_modules/
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]?[hash]'
-        }
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]?[hash]'
+            }
+          }
+        ]
       }
     ]
   },
-  ts: {
-    logLevel: 'warn',
-    appendTsSuffixTo: [/\.vue$/]
-  },
-  vue: {
-    // vue-loader options go here
-    esModule: true
-  },
   resolve: {
+    extensions: ['.js', '.ts', '.vue'],
     alias: {
       'vue$': 'vue/dist/vue.common.js'
-    },
-    extensions: ['', '.js', '.ts']
+    }
   },
   devServer: {
     historyApiFallback: true,
