@@ -1,6 +1,7 @@
 const path = require('path');
 
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/main.ts',
@@ -43,7 +44,8 @@ module.exports = {
               outputPath: 'assets/'
             }
           }
-        ]
+        ],
+        exclude: /node_modules/
       }
     ]
   },
@@ -58,7 +60,13 @@ module.exports = {
     historyApiFallback: true,
     noInfo: true
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: "./src/index.html"
+    })
+  ]
 }
 
 if (process.env.NODE_ENV === 'production') {
