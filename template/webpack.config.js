@@ -6,7 +6,6 @@ module.exports = {
   entry: './src/main.ts',
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
     filename: 'build.js'
   },
   module: {
@@ -40,7 +39,8 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: '[name].[ext]?[hash]'
+              name: '[name].[ext]?[hash]',
+              outputPath: 'assets/'
             }
           }
         ]
@@ -50,7 +50,8 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.vue'],
     alias: {
-      'vue$': 'vue/dist/vue.common.js'
+      'vue$': 'vue/dist/vue.common.js',
+      root: path.join(__dirname, 'node_modules')
     }
   },
   devServer: {
