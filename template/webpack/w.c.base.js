@@ -17,8 +17,7 @@ let config = {
           {
             loader: 'vue-loader',
             options: {
-              esModule: true,
-              'css': 'vue-style-loader!css-loader'
+              esModule: true
             }
           }
         ]
