@@ -1,6 +1,6 @@
 # vue-ts-webpack-simple
 
-> A simple Vue ^2.5.0 with TypeScript 2.5, Webpack 3 & `vue-loader` setup for quick prototyping.
+> A simple Vue strat-up kit with `TypeScript`, `Webpack` and `vue-loader` setup for quick prototyping.
 
 ### Usage
 
