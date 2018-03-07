@@ -1,23 +1,24 @@
-const path = require('path');
+const { resolve } = require('path');
 
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-module.exports = {
-  entry: './src/main.ts',
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    filename: 'build.js'
-  },
+const { root } = require('../lib/helpers');
+const clientpath = root('src/client');
+
+let config = {
+
+  mode: "development",
+
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.vue$/,
         use: [
           {
             loader: 'vue-loader',
             options: {
-              esModule: true
+              esModule: true,
+              'css': 'vue-style-loader!css-loader'
             }
           }
         ]
@@ -28,6 +29,7 @@ module.exports = {
           {
             loader: 'ts-loader',
             options: {
+              configFile: resolve(clientpath, "tsconfig.client.json"),
               appendTsSuffixTo: [/\.vue$/]
             }
           }
@@ -46,6 +48,17 @@ module.exports = {
           }
         ],
         exclude: /node_modules/
+      },
+      {
+        /* Global css */
+        test: /\.css$/,
+        include: resolve(clientpath, 'styles.css'), 
+        use: ExtractTextPlugin.extract(
+          {
+            fallback: 'style-loader',
+            use: [ 'css-loader?sourceMap']
+          }
+        )
       }
     ]
   },
@@ -53,36 +66,26 @@ module.exports = {
     extensions: ['.js', '.ts', '.vue'],
     alias: {
       'vue$': 'vue/dist/vue.common.js',
-      root: path.join(__dirname, 'node_modules')
+      root: root('node_modules')
     }
   },
   devServer: {
     historyApiFallback: true,
-    noInfo: true
+    noInfo: true,
+    overlay: {
+      errors: true,
+      warnings: false
+    }
   },
   devtool: '#eval-source-map',
   plugins: [
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: "./src/index.html"
-    })
+    new ExtractTextPlugin("styles.css")
   ]
 }
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map'
-  // http://vue-loader.vuejs.org/en/workflow/production.html
-  module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
-    })
-  ])
+  config.devtool = '#source-map';
+  config.mode = 'production';
 }
+
+module.exports = config;
